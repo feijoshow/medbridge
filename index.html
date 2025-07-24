@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MedBridge: A New Era of Member Communication</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            background-color: #0a0a0a;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+        .slide {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            height: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            padding: 1rem;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2.5s infinite;
+            z-index: 20;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Animation Classes */
+        .animated-element {
+            opacity: 0;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in { transform: translateY(20px); }
+        .fade-in-up { transform: translateY(30px); }
+        .slide-in-left { transform: translateX(-30px); }
+        .slide-in-right { transform: translateX(30px); }
+        .zoom-in { transform: scale(0.95); }
+
+        .is-visible .animated-element {
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+        }
+        /* Staggered animations */
+        .is-visible .animated-element.delay-1 { transition-delay: 0.2s; }
+        .is-visible .animated-element.delay-2 { transition-delay: 0.3s; }
+        .is-visible .animated-element.delay-3 { transition-delay: 0.4s; }
+        .is-visible .animated-element.delay-4 { transition-delay: 0.5s; }
+
+        /* Slide 1: Title */
+        #title-slide {
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.7); }
+            50% { transform: scale(1.03); box-shadow: 0 0 10px 5px rgba(0, 191, 255, 0); }
+        }
+        .pulsing-icon {
+            animation: pulse 3s infinite;
+            border-radius: 50%;
+        }
+
+        /* Slide 3: Solution - Animated Chat */
+        .chat-bubble {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease-out;
+        }
+        .is-visible .chat-bubble-1 { animation: show-bubble 0.4s forwards 0.4s; }
+        .is-visible .chat-bubble-2 { animation: show-bubble 0.4s forwards 0.8s; }
+        .is-visible .chat-bubble-3 { animation: show-bubble 0.4s forwards 1.2s; }
+        @keyframes show-bubble {
+            from { opacity: 0; transform: translateY(10px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 1rem;
+                min-height: 90vh;
+            }
+            h1 {
+                font-size: 3rem !important;
+                line-height: 1.2 !important;
+            }
+            h2 {
+                font-size: 2rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .slide-content {
+                padding: 0.5rem;
+            }
+            .grid-cols-3, .grid-cols-4 {
+                grid-template-columns: repeat(1, 1fr) !important;
+                gap: 1rem !important;
+            }
+            .md\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+            .p-8, .p-10, .p-12 {
+                padding: 1.5rem !important;
+            }
+            .text-xl {
+                font-size: 1rem !important;
+            }
+            .text-2xl {
+                font-size: 1.25rem !important;
+            }
+            .max-w-xs {
+                max-width: 90% !important;
+            }
+            .h-64 {
+                height: 200px !important;
+            }
+            .tech-icon {
+                width: 80px !important;
+                height: 80px !important;
+            }
+            .rounded-3xl {
+                border-radius: 1rem !important;
+            }
+            .py-20 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            .mb-16 {
+                margin-bottom: 2rem !important;
+            }
+            .text-6xl {
+                font-size: 3.5rem !important;
+            }
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            .text-4xl {
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Prevent horizontal scrolling */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <!-- Slide 1: Title -->
+    <section id="title-slide" class="slide">
+        <div class="slide-content text-center">
+            <div class="mb-4 md:mb-6 pulsing-icon animated-element zoom-in">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-cyan-400"><path d="M12 22a10 10 0 1 0-10-10c0 2.44.83 4.69 2.24 6.42"/><path d="m13.5 13.5 4-4"/><path d="m8 18 3-3"/><path d="M12 8v4h4"/></svg>
+            </div>
+            <h1 class="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-3 md:mb-4 text-white animated-element fade-in-up delay-1">MEDBRIDGE</h1>
+            <p class="text-lg md:text-xl lg:text-2xl font-light text-slate-300 animated-element fade-in-up delay-2">Bridging the gap between members and medical aid.</p>
+        </div>
+        <div class="scroll-indicator text-white animated-element fade-in delay-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+    </section>
+
+     <!-- Slide 3: The Solution -->
+    <section id="solution" class="slide bg-black">
+        <div class="slide-content flex flex-col md:flex-row gap-8 md:gap-12 lg:gap-16 items-center">
+            <div class="text-center md:text-left order-2 md:order-1">
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 text-white animated-element slide-in-left">The Solution: MedBridge</h2>
+                <p class="text-base md:text-lg text-slate-400 mb-4 md:mb-6 animated-element slide-in-left delay-1">A secure, user-friendly digital platform for seamless member-provider communication.</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-2 animated-element slide-in-left delay-2">
+                    <span class="bg-blue-900/50 border border-blue-500 text-blue-300 text-xs md:text-sm font-medium px-2 py-1 rounded-full">24/7 Access</span>
+                    <span class="bg-green-900/50 border border-green-500 text-green-300 text-xs md:text-sm font-medium px-2 py-1 rounded-full">Real-Time</span>
+                    <span class="bg-purple-900/50 border border-purple-500 text-purple-300 text-xs md:text-sm font-medium px-2 py-1 rounded-full">Secure</span>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 p-3 md:p-4 bg-slate-800/50 rounded-xl md:rounded-2xl shadow-inner animated-element zoom-in delay-2 w-full md:w-auto">
+                <div class="bg-slate-900 rounded-lg md:rounded-xl shadow-xl overflow-hidden border border-slate-700">
+                    <div class="bg-slate-800 p-2 md:p-3 flex items-center border-b border-slate-700">
+                        <div class="flex space-x-1"><div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-red-500"></div><div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-400"></div><div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500"></div></div>
+                        <p class="text-xs md:text-sm text-slate-400 ml-2 md:ml-3">MedBridge Dashboard</p>
+                    </div>
+                    <div class="p-3 md:p-4 space-y-3 h-48 md:h-56 lg:h-64">
+                        <div class="flex justify-start chat-bubble chat-bubble-1"><div class="bg-blue-600 text-white p-2 md:p-3 rounded-lg rounded-bl-none max-w-[80%] md:max-w-xs text-sm md:text-base">What are my available benefits?</div></div>
+                        <div class="flex justify-end chat-bubble chat-bubble-2"><div class="bg-slate-700 text-slate-200 p-2 md:p-3 rounded-lg rounded-br-none max-w-[80%] md:max-w-xs text-sm md:text-base">You have 3 GP visits and R1,500 for acute medication remaining.</div></div>
+                        <div class="flex justify-start chat-bubble chat-bubble-3"><div class="bg-blue-600 text-white p-2 md:p-3 rounded-lg rounded-bl-none max-w-[80%] md:max-w-xs text-sm md:text-base">How do I submit a claim?</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: The Problem -->
+    <section id="problem" class="slide bg-slate-900">
+        <div class="slide-content">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 text-white animated-element fade-in">The Communication Hurdle</h2>
+            <p class="text-base md:text-lg text-slate-400 mb-8 md:mb-12 lg:mb-16 animated-element fade-in delay-1">Traditional channels are slow, frustrating, and inefficient.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl border border-slate-700 text-center transition-all duration-300 hover:border-red-500 hover:scale-[1.02] animated-element fade-in-up delay-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 md:mb-3 lg:mb-4 text-red-500"><path d="M10.68 13.31a16 16 0 0 0 3.63 3.63l1.7-1.7a2 2 0 0 1 2.11-.45c.84.27 1.74.45 2.66.52a2 2 0 0 1 2.2 2.2v2.66a2 2 0 0 1-2.2 2.2c-5.52 0-10-4.48-10-10a2 2 0 0 1 2.2-2.2h2.66a2 2 0 0 1 2.2 2.2c.07.92.25 1.82.52 2.66a2 2 0 0 1-.45 2.11l-1.7 1.7Z"/><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <h3 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Long Wait Times</h3>
+                    <p class="text-sm md:text-base text-slate-400">Members are stuck in call queues for simple questions.</p>
+                </div>
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl border border-slate-700 text-center transition-all duration-300 hover:border-amber-500 hover:scale-[1.02] animated-element fade-in-up delay-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 md:mb-3 lg:mb-4 text-amber-500"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <h3 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Repetitive Queries</h3>
+                    <p class="text-sm md:text-base text-slate-400">Staff spend hours answering the same questions repeatedly.</p>
+                </div>
+                <div class="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl border border-slate-700 text-center transition-all duration-300 hover:border-blue-500 hover:scale-[1.02] animated-element fade-in-up delay-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 md:mb-3 lg:mb-4 text-blue-500"><path d="M12 8v4l3 3"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+                    <h3 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Limited Access</h3>
+                    <p class="text-sm md:text-base text-slate-400">Support is only available during restrictive business hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    
+
+    <!-- Slide 4: Features -->
+    <section id="features" class="slide bg-gradient-to-b from-black via-slate-900 to-black py-12 md:py-20">
+        <div class="slide-content max-w-4xl md:max-w-6xl mx-auto px-4 md:px-6">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 lg:mb-16 text-white text-center animated-element fade-in">
+                Powerful Features for Members
+            </h2>
+
+            <div class="flex justify-center">
+                <div class="bg-slate-900 p-6 md:p-8 lg:p-10 rounded-xl md:rounded-2xl lg:rounded-3xl border border-slate-700 shadow-lg md:shadow-xl lg:shadow-2xl w-full max-w-lg md:max-w-2xl 
+                            animated-element slide-in-left delay-1 hover:scale-[1.02] md:hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center text-blue-400 tracking-wide">Members</h3>
+
+                    <ul class="space-y-3 md:space-y-4 lg:space-y-5 text-slate-300 text-sm md:text-base leading-relaxed">
+                        <li class="flex items-start">
+                            <span class="mr-2 md:mr-3 text-blue-400 text-lg md:text-xl">✓</span>
+                            <span><strong>24/7 Automated Answers:</strong> Get instant responses to common questions, anytime.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 md:mr-3 text-blue-400 text-lg md:text-xl">✓</span>
+                            <span><strong>Real-Time Updates:</strong> Check all information regarding your Madical Aid..</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 md:mr-3 text-blue-400 text-lg md:text-xl">✓</span>
+                            <span><strong>Guided Services:</strong> Step-by-step help for complex processes like submissions.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 md:mr-3 text-blue-400 text-lg md:text-xl">✓</span>
+                            <span><strong>Full Enquiry History:</strong> Track all your conversations and resolutions in one place.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-2 md:mr-3 text-blue-400 text-lg md:text-xl">✓</span>
+                            <span><strong>Multilingual Support:</strong> Communicate easily in multiple languages.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Slide 5: How It Works -->
+    <section id="flow" class="slide bg-slate-900">
+        <div class="slide-content">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-white text-center animated-element fade-in">
+                How MedBridge Works
+            </h2>
+
+            <div class="flex flex-col items-center justify-center w-full">
+                <div class="bg-slate-800/50 p-4 md:p-6 rounded-xl md:rounded-2xl border border-slate-700 shadow-lg w-full max-w-2xl lg:max-w-4xl animated-element zoom-in delay-1">
+                    <div class="relative w-full" style="padding-bottom: 60%; min-height: 200px;">
+                        <img 
+                            src="flow.jpg" 
+                            alt="MedBridge User Flow" 
+                            class="absolute inset-0 w-full h-full object-contain"
+                            style="object-position: center;"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: The Benefits -->
+    <section id="benefits" class="slide bg-slate-900">
+        <div class="slide-content">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 md:mb-12 text-white animated-element fade-in">Tangible Benefits</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+                <div class="bg-slate-800/50 p-4 md:p-6 rounded-lg md:rounded-xl text-center animated-element zoom-in delay-1"><h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-green-400 mb-1 md:mb-2">↓</h3><h4 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Reduced Calls</h4><p class="text-xs md:text-sm text-slate-400">Automating repetitive queries</p></div>
+                <div class="bg-slate-800/50 p-4 md:p-6 rounded-lg md:rounded-xl text-center animated-element zoom-in delay-2"><h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-green-400 mb-1 md:mb-2">↑</h3><h4 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Better Service</h4><p class="text-xs md:text-sm text-slate-400">Clear, instant answers</p></div>
+                <div class="bg-slate-800/50 p-4 md:p-6 rounded-lg md:rounded-xl text-center animated-element zoom-in delay-3"><h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-green-400 mb-1 md:mb-2">✓</h3><h4 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">No Waiting</h4><p class="text-xs md:text-sm text-slate-400">Instant digital access</p></div>
+                <div class="bg-slate-800/50 p-4 md:p-6 rounded-lg md:rounded-xl text-center animated-element zoom-in delay-4"><h3 class="text-4xl md:text-5xl lg:text-6xl font-black text-green-400 mb-1 md:mb-2">24/7</h3><h4 class="text-lg md:text-xl font-semibold mb-1 md:mb-2 text-white">Always On</h4><p class="text-xs md:text-sm text-slate-400">Constant support</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Closing -->
+    <section id="closing" class="slide bg-black">
+        <div class="slide-content text-center">
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter mb-3 md:mb-4 text-white animated-element zoom-in">Thank You</h2>
+            <p class="text-lg md:text-xl lg:text-2xl font-light text-slate-300 animated-element zoom-in delay-1">Ready to redefine member communication.</p>
+        </div>
+    </section>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => {
+            observer.observe(slide);
+        });
+
+        // Improved touch handling for mobile
+        let touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > 50) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+    });
+</script>
+
+</body>
+</html>
